@@ -1,5 +1,9 @@
 # EzOutfitter
 
+## v1.0.1
+
+- **Outfit switched back after a Look?** That's the outfit's situations (entering a city, combat and so on) changing it, which addons can't stop. Turn off that outfit's situations at a transmogrifier to keep it on. The Options page and README now say so.
+
 ## v1.0.0
 
 - **Gear and outfit in one click.** A Look pairs one of your equipment sets with one of your transmog outfits. Click it and both change at once. Either half can be left alone, and "No outfit" shows your real gear.

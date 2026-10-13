@@ -13,7 +13,7 @@ local ROW_H, ICON_S = 34, 28
 local FIELD_H, LABEL_H = 22, 16
 local PICK_ROW_H = 20
 local STRIP_S, STRIP_GAP = 30, 3
-local EDITOR_H, OPTIONS_H = 268, 250
+local EDITOR_H, OPTIONS_H = 268, 290
 
 local WHITE = "Interface\\Buttons\\WHITE8x8"
 local FLAT = { bgFile = WHITE, edgeFile = WHITE, edgeSize = 1 }
@@ -562,7 +562,9 @@ notes:SetJustifyH("LEFT")
 notes:SetSpacing(3)
 notes:SetText(format("Key bindings: Options > Keybindings > EzOutfitter. Look 1 to %d follow the order "
     .. "of this list (Shift-right-click moves a look up).\n"
-    .. "Changing outfit has a short cooldown, and most gear can't be swapped in combat.", ns.BINDING_COUNT))
+    .. "Changing outfit has a short cooldown, and most gear can't be swapped in combat.\n"
+    .. "If the game switches your outfit after a look, turn off that outfit's situations at a "
+    .. "transmogrifier.", ns.BINDING_COUNT))
 
 local back = TextButton(options, "Back", 60)
 back:SetPoint("BOTTOMRIGHT")

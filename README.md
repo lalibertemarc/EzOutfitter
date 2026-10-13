@@ -35,6 +35,7 @@ Options > Keybindings > EzOutfitter has a key for the palette and one for each o
 
 - Changing outfit casts a short spell with a cooldown, so it needs a real click or key press. That's why Looks are buttons and key bindings rather than something that fires on its own.
 - While that cooldown runs, Looks that change your outfit show it on their icon and in their tooltip. Clicking one then changes nothing (not even the gear) and tells you how many seconds are left.
+- An outfit with situations (entering a city, combat, ...) can be switched by the game after a Look puts it on, and EzOutfitter can't stop that. To keep a Look's outfit on, turn off that outfit's situations at a transmogrifier.
 - Your own macros can't wear a Look (`/click` on EzOutfitter's buttons does nothing from a macro). Use the palette, the strip or a key binding.
 - Most gear can't be swapped in combat, so the palette and the strip close when combat starts and come back after.
 - Looks are saved per character, like equipment sets and outfits.

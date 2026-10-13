@@ -1,0 +1,11 @@
+## Interface: 16001
+## Title: EzOutfitter
+## Notes: Change your gear set and your transmog outfit together with one click or key. Built for roleplayers.
+## Author: Marc
+## Version: @project-version@
+## IconTexture: Interface\Icons\INV_Chest_Cloth_17
+## SavedVariablesPerCharacter: EzOutfitterDB
+
+Data.lua
+Core.lua
+UI.lua

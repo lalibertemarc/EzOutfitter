@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="48%" r="72%">
+      <stop offset="0" stop-color="#1f6a6c"/>
+      <stop offset="0.55" stop-color="#0f3740"/>
+      <stop offset="1" stop-color="#06161c"/>
+    </radialGradient>
+    <radialGradient id="aura" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffe08a" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffe08a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff0b0"/>
+      <stop offset="0.45" stop-color="#e5b94c"/>
+      <stop offset="1" stop-color="#8f5f17"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef3f8"/>
+      <stop offset="0.5" stop-color="#a9b8c8"/>
+      <stop offset="1" stop-color="#5d6e82"/>
+    </linearGradient>
+    <linearGradient id="silk" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff7d98"/>
+      <stop offset="0.5" stop-color="#d1335a"/>
+      <stop offset="1" stop-color="#7a1630"/>
+    </linearGradient>
+    <pattern id="lattice" width="26" height="26" patternUnits="userSpaceOnUse" patternTransform="rotate(45 200 200)">
+      <path d="M0,0 H26 M0,0 V26" stroke="#ffd3dd" stroke-width="2" opacity="0.28"/>
+      <circle cx="13" cy="13" r="2.2" fill="#ffe08a" opacity="0.7"/>
+    </pattern>
+    <clipPath id="tunic">
+      <path id="tunicShape" d="M160,128 L110,140 L60,206 L92,230 L122,198 L118,344 Q200,364 282,344 L278,198 L308,230 L340,206 L290,140 L240,128 Q200,162 160,128 Z"/>
+    </clipPath>
+    <clipPath id="leftHalf"><rect x="0" y="0" width="200" height="400"/></clipPath>
+    <clipPath id="rightHalf"><rect x="200" y="0" width="200" height="400"/></clipPath>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="400" height="400" fill="url(#bg)"/>
+
+  <!-- stars -->
+  <g fill="#fff6d0" opacity="0.8">
+    <circle cx="34" cy="74" r="1.6"/><circle cx="372" cy="352" r="1.8"/><circle cx="120" cy="22" r="1.4"/>
+    <circle cx="300" cy="384" r="1.4"/><circle cx="22" cy="300" r="1.8"/><circle cx="384" cy="118" r="1.4"/>
+  </g>
+
+  <!-- glow behind the garment -->
+  <circle cx="200" cy="230" r="150" fill="url(#aura)"/>
+
+  <!-- swap arrows -->
+  <g fill="none" stroke="url(#gold)" stroke-width="9" stroke-linecap="round" opacity="0.95">
+    <path d="M308,86 A168,168 0 0 1 345.5,299"/>
+    <path d="M92,343.7 A168,168 0 0 1 54.5,131"/>
+  </g>
+  <g fill="#e5b94c" stroke="#e5b94c" stroke-width="4" stroke-linejoin="round">
+    <path d="M337.5,316 L357,302 L334,291 Z"/>
+    <path d="M62.5,114 L43,128 L66,139 Z"/>
+  </g>
+
+  <!-- hanger -->
+  <g fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M200,108 V90 C200,74 222,70 222,52 C222,36 209,28 197,29 C185,30 178,40 181,49" stroke-width="9"/>
+    <path d="M200,108 L88,156 L312,156 Z" stroke-width="9"/>
+  </g>
+
+  <!-- tunic: plate armor on the left, silk on the right -->
+  <g clip-path="url(#tunic)">
+    <g clip-path="url(#leftHalf)">
+      <rect x="0" y="100" width="200" height="280" fill="url(#steel)"/>
+      <g fill="#4a5a6c" opacity="0.85">
+        <rect x="0" y="214" width="200" height="6"/>
+        <rect x="0" y="258" width="200" height="6"/>
+        <rect x="0" y="302" width="200" height="6"/>
+      </g>
+      <g fill="#ffffff" opacity="0.5">
+        <rect x="0" y="221" width="200" height="3"/>
+        <rect x="0" y="265" width="200" height="3"/>
+        <rect x="0" y="309" width="200" height="3"/>
+      </g>
+      <g fill="#3a4757">
+        <circle cx="140" cy="236" r="4"/><circle cx="176" cy="236" r="4"/>
+        <circle cx="140" cy="280" r="4"/><circle cx="176" cy="280" r="4"/>
+        <circle cx="140" cy="324" r="4"/><circle cx="176" cy="324" r="4"/>
+      </g>
+    </g>
+    <g clip-path="url(#rightHalf)">
+      <rect x="200" y="100" width="200" height="280" fill="url(#silk)"/>
+      <rect x="200" y="100" width="200" height="280" fill="url(#lattice)"/>
+      <rect x="200" y="318" width="200" height="14" fill="url(#gold)"/>
+      <path d="M200,162 Q226,152 242,130" fill="none" stroke="url(#gold)" stroke-width="12" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- outline -->
+  <path d="M160,128 L110,140 L60,206 L92,230 L122,198 L118,344 Q200,364 282,344 L278,198 L308,230 L340,206 L290,140 L240,128 Q200,162 160,128 Z" fill="none" stroke="#2a1a10" stroke-width="6" stroke-linejoin="round"/>
+
+  <!-- pauldron on the armored shoulder: two overlapping plates -->
+  <g stroke="#2a1a10" stroke-width="5" stroke-linejoin="round">
+    <path d="M52,206 Q50,170 80,152 L98,178 Q78,190 72,214 Z" fill="url(#steel)"/>
+    <path d="M70,170 Q84,128 132,124 Q156,124 170,134 Q150,150 128,154 Q100,160 84,186 Z" fill="url(#steel)"/>
+  </g>
+  <path d="M84,160 Q100,136 134,132" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+  <circle cx="140" cy="140" r="4.5" fill="#e5b94c" stroke="#2a1a10" stroke-width="2"/>
+
+  <!-- the change: a glowing seam -->
+  <g filter="url(#glow)">
+    <path d="M200,146 V354" stroke="#fff6d0" stroke-width="5" stroke-linecap="round"/>
+    <path d="M200,212 Q203,237 228,240 Q203,243 200,268 Q197,243 172,240 Q197,237 200,212 Z" fill="#fff6d0"/>
+  </g>
+
+  <!-- sparkles -->
+  <g fill="#fff6d0">
+    <path d="M352,52 Q354,64 366,66 Q354,68 352,80 Q350,68 338,66 Q350,64 352,52 Z"/>
+    <path d="M62,30 Q63.5,39 72,40.5 Q63.5,42 62,51 Q60.5,42 52,40.5 Q60.5,39 62,30 Z"/>
+    <path d="M330,356 Q331.5,365 340,366.5 Q331.5,368 330,377 Q328.5,368 320,366.5 Q328.5,365 330,356 Z"/>
+  </g>
+</svg>

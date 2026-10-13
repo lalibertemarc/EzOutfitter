@@ -1,0 +1,13 @@
+<Bindings>
+	<Binding name="EZOUTFITTER_PALETTE" category="EzOutfitter">EzOutfitter_TogglePalette()</Binding>
+	<Binding name="CLICK EzOutfitterLook1:LeftButton" category="EzOutfitter"/>
+	<Binding name="CLICK EzOutfitterLook2:LeftButton" category="EzOutfitter"/>
+	<Binding name="CLICK EzOutfitterLook3:LeftButton" category="EzOutfitter"/>
+	<Binding name="CLICK EzOutfitterLook4:LeftButton" category="EzOutfitter"/>
+	<Binding name="CLICK EzOutfitterLook5:LeftButton" category="EzOutfitter"/>
+	<Binding name="CLICK EzOutfitterLook6:LeftButton" category="EzOutfitter"/>
+	<Binding name="CLICK EzOutfitterLook7:LeftButton" category="EzOutfitter"/>
+	<Binding name="CLICK EzOutfitterLook8:LeftButton" category="EzOutfitter"/>
+	<Binding name="CLICK EzOutfitterLook9:LeftButton" category="EzOutfitter"/>
+	<Binding name="CLICK EzOutfitterLook10:LeftButton" category="EzOutfitter"/>
+</Bindings>

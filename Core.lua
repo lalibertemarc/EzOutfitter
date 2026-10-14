@@ -71,12 +71,54 @@ function ns.Current()
 end
 
 ---------------------------------------------------------------------------
--- Looks: EzOutfitterDB.looks[i] = { id, name, set = setID?, outfit = outfitID | CLEAR_OUTFIT | nil, emote }
+-- Looks: EzOutfitterDB.looks[i] = { id, name, set = setID?, setName, setItems, outfit = outfitID | CLEAR_OUTFIT | nil, emote }
+-- setName and setItems remember what the set was, to find it again after it's renamed.
 ---------------------------------------------------------------------------
 function ns.Look(id)
     for i, look in ipairs(EzOutfitterDB.looks) do
         if look.id == id then return look, i end
     end
+end
+
+local FIRST_SLOT, LAST_SLOT = INVSLOT_FIRST_EQUIPPED or 1, INVSLOT_LAST_EQUIPPED or 19
+
+-- An equipment set's items as one string ("0" for empty or ignored slots), or nil.
+local function SetItems(id)
+    local ids = id and C_EquipmentSet.GetItemIDs(id)
+    if not ids then return end
+    local parts = {}
+    for slot = FIRST_SLOT, LAST_SLOT do
+        local item = ids[slot]
+        if issecret(item) then return end
+        parts[#parts + 1] = item or 0
+    end
+    return table.concat(parts, ",")
+end
+
+-- The equipment set a Look means now. Its ID while that set keeps its name or its items (a
+-- rename); else the set with its old name; else the only set with its items; else the ID.
+local function FindSet(look)
+    local name = ns.GearSet(look.set)
+    if name and (not look.setName or name == look.setName) then return look.set end
+    if name and look.setItems and SetItems(look.set) == look.setItems then return look.set end
+    local byName = look.setName and C_EquipmentSet.GetEquipmentSetID(look.setName)
+    if byName and ns.GearSet(byName) then return byName end
+    if look.setItems then
+        local found, count = nil, 0
+        for _, set in ipairs(ns.GearSets()) do
+            if SetItems(set.id) == look.setItems then found, count = set.id, count + 1 end
+        end
+        if count == 1 then return found end
+    end
+    if name then return look.set end
+end
+
+-- Follows a renamed equipment set; a set that's gone keeps what's saved, in case it comes back.
+local function RefreshSet(look)
+    local id = look.set and FindSet(look)
+    if not id then return end
+    look.set, look.setName = id, ns.GearSet(id)
+    look.setItems = SetItems(id) or look.setItems
 end
 
 -- Saves a Look; a new one when id is nil.
@@ -88,6 +130,7 @@ function ns.SaveLook(id, name, set, outfit, emote)
         table.insert(EzOutfitterDB.looks, look)
     end
     look.name, look.set, look.outfit, look.emote = name, set, outfit, emote
+    look.setName, look.setItems = ns.GearSet(set), SetItems(set)
     ns.Update()
 end
 
@@ -333,6 +376,7 @@ function ns.Update()
         return
     end
     pending = false
+    for _, look in ipairs(EzOutfitterDB.looks) do RefreshSet(look) end
     for i, b in ipairs(keyButtons) do ns.ArmButton(b, EzOutfitterDB.looks[i]) end
     UpdateBindingNames()
     if ns.OnLooksChanged then ns.OnLooksChanged() end
@@ -389,8 +433,9 @@ local COMMANDS = {
             #EzOutfitterDB.looks, #ns.GearSets(), tostring(pending)))
         for i, look in ipairs(EzOutfitterDB.looks) do
             local info = ns.Outfit(look.outfit)
-            Print(format("%d. %s | set %s = %s | outfit %s = %s (index %s, disabled %s)",
-                i, look.name, tostring(look.set), tostring(ns.GearSet(look.set)), tostring(look.outfit),
+            Print(format("%d. %s | set %s = %s (saved as %s) | outfit %s = %s (index %s, disabled %s)",
+                i, look.name, tostring(look.set), tostring(ns.GearSet(look.set)), tostring(look.setName),
+                tostring(look.outfit),
                 tostring(info and info.name), tostring(info and info.playerFacingOutfitIndex),
                 tostring(info and info.isDisabled)))
             Print(format("   palette macro: %s | key: %s", Flat(ns.Macro(look)),
@@ -423,7 +468,9 @@ ev:SetScript("OnEvent", function(_, event)
     elseif not ready then
         return
     elseif event == "EQUIPMENT_SETS_CHANGED" or event == "TRANSMOG_OUTFITS_CHANGED" then
-        ns.Update() -- a rename changes the macros
+        -- A rename changes the macros. Again a moment later, in case the new name lands after the event.
+        ns.Update()
+        C_Timer.After(1, ns.Update)
     elseif event == "PLAYER_REGEN_DISABLED" then
         if ns.OnCombat then ns.OnCombat(true) end
     elseif event == "PLAYER_REGEN_ENABLED" then

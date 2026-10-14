@@ -23,4 +23,5 @@ read_globals = {
     -- Global APIs
     "SendChatMessage", "UnitExists", "UnitName", "InCombatLockdown", "IsShiftKeyDown", "GetTime",
     "GetBindingKey", "GetBindingText",
+    "INVSLOT_FIRST_EQUIPPED", "INVSLOT_LAST_EQUIPPED",
 }

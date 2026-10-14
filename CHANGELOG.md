@@ -1,5 +1,9 @@
 # EzOutfitter
 
+## v1.0.2
+
+- **Renaming an equipment set no longer breaks your Looks.** A Look follows its set when you rename it in the equipment manager, and finds it again if you delete it and make one with the same name.
+
 ## v1.0.1
 
 - **Outfit switched back after a Look?** That's the outfit's situations (entering a city, combat and so on) changing it, which addons can't stop. Turn off that outfit's situations at a transmogrifier to keep it on. The Options page and README now say so.

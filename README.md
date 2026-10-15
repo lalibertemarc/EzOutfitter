@@ -14,7 +14,7 @@ Open your Looks with the key binding, the launcher icon, `/eo`, or the gear butt
 
 - **+ New look** starts from whatever you're wearing: your equipped set, your shown outfit, and a name taken from them.
 - **Click** a Look to wear it. The palette closes; **Shift-click** keeps it open.
-- **Right-click** edits it; **Shift-right-click** moves it up the list.
+- **Right-click** edits it; **Ctrl-right-click** (or **Copy** in the editor) starts a new Look from a copy of it; **Shift-right-click** moves it up the list.
 - The Look you're wearing has a green border.
 - The gear button (or right-clicking the launcher icon) opens the options: show or hide the launcher icon and the character-window strip, and keep the palette open after changing.
 

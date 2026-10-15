@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- **Copy a Look.** Ctrl-right-click a Look, or press **Copy** in its editor, to start a new Look with the same gear set, outfit and /e line. Change what you want and Save; nothing is added until you do.
 - **Shift-click works.** Shift-clicking a Look (to keep the palette open) only sent its /e line without changing gear or outfit. Looks bound to keys with Shift, Ctrl or Alt had the same problem. Both now put the whole Look on.
 
 ## v1.0.2

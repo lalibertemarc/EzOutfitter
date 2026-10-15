@@ -21,7 +21,7 @@ read_globals = {
     -- Namespaced APIs
     "C_EquipmentSet", "C_TransmogOutfitInfo", "C_ChatInfo", "C_Spell", "C_Timer", "issecretvalue", "Constants",
     -- Global APIs
-    "SendChatMessage", "UnitExists", "UnitName", "InCombatLockdown", "IsShiftKeyDown", "GetTime",
+    "SendChatMessage", "UnitExists", "UnitName", "InCombatLockdown", "IsShiftKeyDown", "IsControlKeyDown", "GetTime",
     "GetBindingKey", "GetBindingText",
     "INVSLOT_FIRST_EQUIPPED", "INVSLOT_LAST_EQUIPPED",
 }

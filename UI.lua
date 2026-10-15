@@ -135,7 +135,7 @@ local function ShowLookTooltip(b)
     if key then GameTooltip:AddDoubleLine("Key", GetBindingText(key), 0.6, 0.6, 0.6, unpack(GOLD)) end
     GameTooltip:AddLine(" ")
     GameTooltip:AddLine("Click: wear it   Shift-click: keep open", unpack(MUTED))
-    GameTooltip:AddLine("Right-click: edit", unpack(MUTED))
+    GameTooltip:AddLine("Right-click: edit   Ctrl-right-click: copy", unpack(MUTED))
     GameTooltip:AddLine("Shift-right-click: move earlier", unpack(MUTED))
     GameTooltip:Show()
 end
@@ -346,6 +346,7 @@ editor:SetPoint("BOTTOMRIGHT", -PAD, PAD)
 editor:Hide()
 
 local editing = {} -- { id, set, outfit } of the Look being edited; id is nil for a new one
+local ShowEditor -- defined below
 
 local function Label(text, anchor)
     local l = Text(editor, "GameFontNormalSmall")
@@ -454,8 +455,10 @@ local save = TextButton(editor, "Save", 60)
 save:SetPoint("BOTTOMRIGHT")
 local cancel = TextButton(editor, "Cancel", 60)
 cancel:SetPoint("RIGHT", save, "LEFT", -GAP, 0)
-local delete = TextButton(editor, "Delete", 60)
+local delete = TextButton(editor, "Delete", 52)
 delete:SetPoint("BOTTOMLEFT")
+local copy = TextButton(editor, "Copy", 52)
+copy:SetPoint("LEFT", delete, "RIGHT", GAP, 0)
 
 save:SetScript("OnClick", function()
     local name = strtrim(nameBox:GetText())
@@ -476,6 +479,16 @@ delete:SetScript("OnClick", function(self)
     ns.DeleteLook(editing.id)
     SetMode("list")
 end)
+-- Starts a new Look from the one in the editor, unsaved changes included; it's only added on Save.
+local function StartCopy()
+    if #EzOutfitterDB.looks >= ns.MAX_LOOKS then return end
+    local name = strtrim(nameBox:GetText())
+    editing = { set = editing.set, outfit = editing.outfit }
+    nameBox:SetText(name ~= "" and name .. " copy" or "")
+    ShowEditor()
+    ShowHint("A copy. Change what you want, then Save.", GOLD)
+end
+copy:SetScript("OnClick", StartCopy)
 
 for _, box in ipairs({ nameBox, emoteBox }) do
     box:SetScript("OnEscapePressed", function() SetMode("list") end)
@@ -484,8 +497,8 @@ end
 nameBox:SetScript("OnTabPressed", function() emoteBox:SetFocus() end)
 emoteBox:SetScript("OnTabPressed", function() nameBox:SetFocus() end)
 
--- Opens the editor on Look id, or on a new one started from what you're wearing.
-function OpenEditor(id)
+-- Opens the editor on Look id (on a copy of it with asCopy), or on a new one started from what you're wearing.
+function OpenEditor(id, asCopy)
     local look = id and ns.Look(id)
     if look then
         editing = { id = look.id, set = look.set, outfit = look.outfit }
@@ -498,7 +511,14 @@ function OpenEditor(id)
         nameBox:SetText(info and info.name or ns.GearSet(set) or "")
         emoteBox:SetText("")
     end
-    delete:SetShown(look ~= nil)
+    ShowEditor()
+    if look and asCopy then StartCopy() end
+end
+
+-- Shows the editor on what's in editing and the boxes.
+function ShowEditor()
+    delete:SetShown(editing.id ~= nil)
+    copy:SetShown(editing.id ~= nil and #EzOutfitterDB.looks < ns.MAX_LOOKS)
     delete.armed = nil
     delete.text:SetText("Delete")
     delete.text:SetTextColor(1, 1, 1)
@@ -627,10 +647,10 @@ function EzOutfitter_TogglePalette()
     ns.TogglePalette()
 end
 
-function ns.OpenEditor(id)
+function ns.OpenEditor(id, asCopy)
     if CombatBlocked() then return end
     palette:Show()
-    OpenEditor(id)
+    OpenEditor(id, asCopy)
 end
 
 ---------------------------------------------------------------------------
@@ -774,10 +794,10 @@ function ns.OnSwapped(keepOpen)
     if palette:IsShown() and mode == "list" and not (keepOpen or EzOutfitterDB.keepOpen) then palette:Hide() end
 end
 
--- Right-click on a Look: edit it, or with Shift move it up.
+-- Right-click on a Look: edit it, with Ctrl edit a copy of it, or with Shift move it up.
 function ns.OnLookRightClick(look)
     if IsShiftKeyDown() then return ns.MoveLookUp(look.id) end
-    ns.OpenEditor(look.id)
+    ns.OpenEditor(look.id, IsControlKeyDown())
 end
 
 -- Combat starting: close what holds secure buttons while that's still allowed. Ending: bring the strip back.

@@ -266,6 +266,10 @@ empty:SetText("A Look is an equipment set and a transmog outfit you put on toget
 local newLook = TextButton(list, "+ New look", WIDTH - 2 * PAD)
 newLook:SetScript("OnClick", function() OpenEditor() end)
 
+local function HasRoom()
+    return #EzOutfitterDB.looks < ns.MAX_LOOKS
+end
+
 -- Arms and places the rows for your Looks and sizes the palette to fit. Out of combat only.
 local function LayoutList()
     local looks = EzOutfitterDB.looks
@@ -274,7 +278,7 @@ local function LayoutList()
     local listH = #looks == 0 and (math.max(empty:GetStringHeight(), 36) + GAP) or #looks * ROW_H
     newLook:ClearAllPoints()
     newLook:SetPoint("TOPLEFT", 0, -listH)
-    newLook:SetShown(#looks < ns.MAX_LOOKS)
+    newLook:SetShown(HasRoom())
     palette:SetHeight(-BODY_TOP + listH + (newLook:IsShown() and 20 or 0) + PAD)
 end
 
@@ -481,7 +485,7 @@ delete:SetScript("OnClick", function(self)
 end)
 -- Starts a new Look from the one in the editor, unsaved changes included; it's only added on Save.
 local function StartCopy()
-    if #EzOutfitterDB.looks >= ns.MAX_LOOKS then return end
+    if not HasRoom() then return end
     local name = strtrim(nameBox:GetText())
     editing = { set = editing.set, outfit = editing.outfit }
     nameBox:SetText(name ~= "" and name .. " copy" or "")
@@ -515,10 +519,10 @@ function OpenEditor(id, asCopy)
     if look and asCopy then StartCopy() end
 end
 
--- Shows the editor on what's in editing and the boxes.
+-- Shows the editor on editing, once the name and emote boxes are filled.
 function ShowEditor()
     delete:SetShown(editing.id ~= nil)
-    copy:SetShown(editing.id ~= nil and #EzOutfitterDB.looks < ns.MAX_LOOKS)
+    copy:SetShown(editing.id ~= nil and HasRoom())
     delete.armed = nil
     delete.text:SetText("Delete")
     delete.text:SetTextColor(1, 1, 1)

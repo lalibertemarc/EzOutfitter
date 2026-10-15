@@ -1,5 +1,9 @@
 # EzOutfitter
 
+## Unreleased
+
+- **Shift-click works.** Shift-clicking a Look (to keep the palette open) only sent its /e line without changing gear or outfit. Looks bound to keys with Shift, Ctrl or Alt had the same problem. Both now put the whole Look on.
+
 ## v1.0.2
 
 - **Renaming an equipment set no longer breaks your Looks.** A Look follows its set when you rename it in the equipment manager, and finds it again if you delete it and make one with the same name.

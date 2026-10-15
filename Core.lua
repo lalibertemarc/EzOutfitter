@@ -189,15 +189,17 @@ end
 -- EzOutfitterOutfit #3 reads "type-#3", "outfit-index-#3" and "action-#3". "change" keeps the
 -- outfit on if it's already shown ("toggle" would take it off); "clear" shows your real gear.
 -- Slot numbers don't move when outfits are renamed, so these are set once and never in combat.
+-- Here and on the Look buttons, "*" makes an attribute count with Shift/Ctrl/Alt held too: a
+-- plain "type1" is only read for an unmodified click.
 local outfitButton = CreateFrame("Button", "EzOutfitterOutfit", UIParent, "SecureActionButtonTemplate")
 outfitButton:SetAttribute("useOnKeyDown", false)
 outfitButton:RegisterForClicks("AnyUp", "AnyDown")
 
 -- Points key at outfit slot index, or at "no outfit" when index is nil.
 local function SetOutfitKey(key, index)
-    outfitButton:SetAttribute("type-" .. key, "outfit")
-    outfitButton:SetAttribute("outfit-index-" .. key, index)
-    outfitButton:SetAttribute("action-" .. key, index and "change" or "clear")
+    outfitButton:SetAttribute("*type-" .. key, "outfit")
+    outfitButton:SetAttribute("*outfit-index-" .. key, index)
+    outfitButton:SetAttribute("*action-" .. key, index and "change" or "clear")
 end
 
 SetOutfitKey("#clear")
@@ -303,7 +305,7 @@ local function OnLookPreClick(self, button, down)
     local wait = ns.OutfitWait(look)
     if wait <= 0 then return end
     self.wait = wait
-    if not InCombatLockdown() then self:SetAttribute("macrotext1", nil) end
+    if not InCombatLockdown() then self:SetAttribute("*macrotext1", nil) end
 end
 
 -- PostClick of every Look button (keys, palette rows, strip): the macro has just run. Key
@@ -333,7 +335,7 @@ function ns.NewLookButton(name, parent, extraTemplate)
     local b = CreateFrame("Button", name, parent, "SecureActionButtonTemplate" .. (extraTemplate and "," .. extraTemplate or ""))
     -- Act on release for keys too, like a mouse click: the PostClick below ignores the press.
     b:SetAttribute("useOnKeyDown", false)
-    b:SetAttribute("type1", "macro")
+    b:SetAttribute("*type1", "macro")
     b:SetScript("PreClick", OnLookPreClick)
     b:SetScript("PostClick", ns.OnLookClick)
     return b
@@ -342,7 +344,7 @@ end
 -- Points button at look (or nothing). Out of combat only.
 function ns.ArmButton(b, look)
     b.look = look
-    b:SetAttribute("macrotext1", look and ns.Macro(look) or nil)
+    b:SetAttribute("*macrotext1", look and ns.Macro(look) or nil)
 end
 
 -- Hidden buttons behind the Look 1..N key bindings. They don't work from your own macros:
@@ -439,7 +441,7 @@ local COMMANDS = {
                 tostring(info and info.name), tostring(info and info.playerFacingOutfitIndex),
                 tostring(info and info.isDisabled)))
             Print(format("   palette macro: %s | key: %s", Flat(ns.Macro(look)),
-                Flat(keyButtons[i] and keyButtons[i]:GetAttribute("macrotext1"))))
+                Flat(keyButtons[i] and keyButtons[i]:GetAttribute("*macrotext1"))))
         end
     end,
 }

@@ -398,11 +398,87 @@ local function InitDB()
 end
 
 ---------------------------------------------------------------------------
+-- /eo check: is your target showing transmog? Yours comes from the outfit API, anyone
+-- else's from inspect data: a slot is transmogged when it shows another source than the worn item.
+---------------------------------------------------------------------------
+local NO_TRANSMOG = Constants and Constants.Transmog and Constants.Transmog.NoTransmogID or 0
+local inspecting -- { guid, name, timer } while waiting for INSPECT_READY
+
+local function CheckSelf()
+    local shown = Outfits and Outfits.IsEquippedGearOutfitDisplayed()
+    if shown == nil or issecret(shown) then return Print("You: the game won't say whether your transmog is on.") end
+    if shown then return Print("You: transmog |cffff5555OFF|r, showing your real gear.") end
+    local info = ns.Outfit(ActiveOutfitID())
+    Print("You: transmog |cff55ff55ON|r" .. (info and (", outfit " .. info.name) or "") .. ".")
+end
+
+local function SourceOf(link)
+    if not link or issecret(link) then return end
+    local _, source = C_TransmogCollection.GetItemInfo(link)
+    if not issecret(source) then return source end
+end
+
+local function ReportInspect(name)
+    local list = C_TransmogCollection.GetInspectItemTransmogInfoList()
+    if not list or #list == 0 then
+        return Print(name .. ": inspect gave no transmog data (Forever may not share it).")
+    end
+    local worn, unknown, changed = 0, 0, {}
+    for slot = INVSLOT_FIRST_EQUIPPED, INVSLOT_LAST_EQUIPPED do
+        local link = GetInventoryItemLink("target", slot)
+        local shown = list[slot] and list[slot].appearanceID
+        if link then
+            worn = worn + 1
+            local base = SourceOf(link)
+            if not base or shown == nil or issecret(shown) then
+                unknown = unknown + 1
+            elseif shown ~= NO_TRANSMOG and shown ~= base then
+                changed[#changed + 1] = format("   %s (source %d) shows source %d", link, base, shown)
+            end
+        end
+    end
+    local unread = unknown > 0 and format(", %d unreadable", unknown) or ""
+    if #changed > 0 then
+        Print(format("%s: transmog |cff55ff55ON|r, %d of %d slots changed%s:", name, #changed, worn, unread))
+        for _, line in ipairs(changed) do Print(line) end
+    else
+        Print(format("%s: transmog |cffff5555OFF|r, %d slots show their real items%s.", name, worn - unknown, unread))
+    end
+end
+
+local function OnInspectReady(guid)
+    if not inspecting or guid ~= inspecting.guid then return end
+    local name = inspecting.name
+    inspecting.timer:Cancel()
+    inspecting = nil
+    if UnitGUID("target") ~= guid then return Print(name .. " is no longer your target.") end
+    ReportInspect(name)
+    if not (_G.InspectFrame and _G.InspectFrame:IsShown()) then ClearInspectPlayer() end
+end
+
+local function CheckTarget()
+    if not UnitExists("target") or UnitIsUnit("target", "player") then return CheckSelf() end
+    if not UnitIsPlayer("target") then return Print("Target a player, or nobody to check yourself.") end
+    local name, guid = UnitName("target"), UnitGUID("target")
+    if issecret(name) then name = "Your target" end
+    if not guid or issecret(guid) or not CanInspect("target") then
+        return Print(name .. " can't be inspected right now.")
+    end
+    if inspecting then inspecting.timer:Cancel() end
+    inspecting = { guid = guid, name = name, timer = C_Timer.NewTimer(5, function()
+        inspecting = nil
+        Print("No inspect answer for " .. name .. ". Too far away?")
+    end) }
+    NotifyInspect("target")
+end
+
+---------------------------------------------------------------------------
 -- Slash commands
 ---------------------------------------------------------------------------
 local HELP = {
     "/eo - open or close your looks",
     "/eo new - make a look from what you're wearing",
+    "/eo check - is your target (or you) showing transmog?",
     "/eo icon - show or hide the launcher icon",
     "/eo reset - reset the icon and palette positions",
     "Key bindings: Options > Keybindings > EzOutfitter",
@@ -411,6 +487,7 @@ local HELP = {
 local COMMANDS = {
     [""]  = function() ns.TogglePalette() end,
     new   = function() ns.OpenEditor() end,
+    check = CheckTarget,
     icon  = function()
         EzOutfitterDB.hideIcon = not EzOutfitterDB.hideIcon
         ns.UpdateIcon()
@@ -461,7 +538,7 @@ end
 local ready -- set at login; equipment and combat events can come earlier
 
 local ev = CreateFrame("Frame")
-ev:SetScript("OnEvent", function(_, event)
+ev:SetScript("OnEvent", function(_, event, ...)
     if event == "PLAYER_LOGIN" then
         ready = true
         InitDB()
@@ -478,6 +555,8 @@ ev:SetScript("OnEvent", function(_, event)
     elseif event == "PLAYER_REGEN_ENABLED" then
         if pending then ns.Update() end
         if ns.OnCombat then ns.OnCombat(false) end
+    elseif event == "INSPECT_READY" then
+        OnInspectReady(...)
     elseif event == "SPELL_UPDATE_COOLDOWN" then
         if ns.OnCooldownChanged then ns.OnCooldownChanged() end
     elseif ns.OnWornChanged then
@@ -487,7 +566,7 @@ end)
 for _, event in ipairs({
     "PLAYER_LOGIN", "EQUIPMENT_SETS_CHANGED", "TRANSMOG_OUTFITS_CHANGED", "PLAYER_REGEN_DISABLED",
     "PLAYER_REGEN_ENABLED", "EQUIPMENT_SWAP_FINISHED", "PLAYER_EQUIPMENT_CHANGED", "TRANSMOG_DISPLAYED_OUTFIT_CHANGED",
-    "SPELL_UPDATE_COOLDOWN",
+    "SPELL_UPDATE_COOLDOWN", "INSPECT_READY",
 }) do
     ev:RegisterEvent(event)
 end

@@ -1,5 +1,9 @@
 # EzOutfitter
 
+## Unreleased
+
+- **Is that transmog?** `/eo check` tells you whether your target is showing transmog, and which slots look different from the gear they're actually wearing. With no target it checks you: which outfit is on, or your real gear.
+
 ## v1.1.0
 
 - **Copy a Look.** Ctrl-right-click a Look, or press **Copy** in its editor, to start a new Look with the same gear set, outfit and /e line. Change what you want and Save; nothing is added until you do.

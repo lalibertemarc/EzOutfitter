@@ -28,6 +28,7 @@ Options > Keybindings > EzOutfitter has a key for the palette and one for each o
 |---|---|
 | `/eo` | Open or close your Looks |
 | `/eo new` | Make a Look from what you're wearing |
+| `/eo check` | Tell whether your target (or you, with no target) is showing transmog, and which slots |
 | `/eo icon` | Show or hide the launcher icon |
 | `/eo reset` | Reset the icon and palette positions |
 
@@ -39,3 +40,4 @@ Options > Keybindings > EzOutfitter has a key for the palette and one for each o
 - Your own macros can't wear a Look (`/click` on EzOutfitter's buttons does nothing from a macro). Use the palette, the strip or a key binding.
 - Most gear can't be swapped in combat, so the palette and the strip close when combat starts and come back after.
 - Looks are saved per character, like equipment sets and outfits.
+- `/eo check` on another player inspects them, so they need to be close enough to inspect.

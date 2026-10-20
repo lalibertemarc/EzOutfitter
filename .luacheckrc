@@ -19,9 +19,10 @@ read_globals = {
     -- Frames & UI
     "CreateFrame", "UIParent", "UISpecialFrames", "UIErrorsFrame", "GameTooltip", "DEFAULT_CHAT_FRAME", "ChatFrame1", "CharacterFrame",
     -- Namespaced APIs
-    "C_EquipmentSet", "C_TransmogOutfitInfo", "C_ChatInfo", "C_Spell", "C_Timer", "issecretvalue", "Constants",
+    "C_EquipmentSet", "C_TransmogOutfitInfo", "C_TransmogCollection", "C_ChatInfo", "C_Spell", "C_Timer", "issecretvalue", "Constants",
     -- Global APIs
     "SendChatMessage", "UnitExists", "UnitName", "InCombatLockdown", "IsShiftKeyDown", "IsControlKeyDown", "GetTime",
     "GetBindingKey", "GetBindingText",
+    "UnitIsUnit", "UnitIsPlayer", "UnitGUID", "CanInspect", "NotifyInspect", "ClearInspectPlayer", "GetInventoryItemLink",
     "INVSLOT_FIRST_EQUIPPED", "INVSLOT_LAST_EQUIPPED",
 }

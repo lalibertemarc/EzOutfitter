@@ -1,5 +1,9 @@
 # EzOutfitter
 
+## v1.2.1
+
+- Listed under **Roleplay** in the game's AddOns list, next to other roleplay addons.
+
 ## v1.2.0
 
 - **Is that transmog?** `/eo check` tells you whether your target is showing transmog, and which slots look different from the gear they're actually wearing. With no target it checks you: which outfit is on, or your real gear.

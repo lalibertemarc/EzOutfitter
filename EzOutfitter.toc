@@ -3,6 +3,17 @@
 ## Notes: Change your gear set and your transmog outfit together with one click or key. Built for roleplayers.
 ## Author: Marc
 ## Version: @project-version@
+## Category: Roleplay
+## Category-deDE: Rollenspiel
+## Category-esES: Juego de rol
+## Category-esMX: Juego de rol
+## Category-frFR: Jeu de rôle
+## Category-itIT: Gioco di Ruolo
+## Category-koKR: 롤플레잉
+## Category-ptBR: Interpretação de Papel
+## Category-ruRU: Ролевая игра
+## Category-zhCN: 角色扮演
+## Category-zhTW: 角色扮演
 ## IconTexture: Interface\Icons\INV_Chest_Cloth_17
 ## SavedVariablesPerCharacter: EzOutfitterDB
 ## X-Curse-Project-ID: 1743705
